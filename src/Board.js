@@ -79,12 +79,33 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var rooksCounter = 0;
+      var rows = this.rows();
+      var row = rows[rowIndex];
+      if(row[rowIndex] === undefined) {
+        return;
+      }
+
+      for(var i=0;i<row.length;i++) {
+        if(row[i] === 1) {
+          rooksCounter++;
+        }
+        if(rooksCounter >= 2) {
+          return true;
+        }
+      }
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      for(var i=0;i<rows.length;i++) {
+        if(this.hasRowConflictAt(i)) {
+          return true;
+        }
+      } 
+      return false;
     },
 
 
@@ -94,12 +115,35 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var rooksCounter = 0;
+      //get a reference to rows
+      var rows = this.rows();
+      //traverse rows
+      for(var i=0; i<rows.length;i++) {
+        //get the current row
+        var currRow = rows[i];
+        // check the arget column index within the current row
+        if(currRow[colIndex] === 1) {
+          rooksCounter++;
+        }
+        if(rooksCounter >= 2) {
+          return true;
+        }
+      }
+      return false; 
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+
+      for(var i=0; i<rows.length;i++) {
+        if(this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+
+      return false;
     },
 
 
