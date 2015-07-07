@@ -17,10 +17,44 @@ window.findNRooksSolution = function(n) {
   var solution = []; //fixme
 
   // make the empty board
-  var emptyBoard = new Board({n:n});
+  var possibleSolutions = [];
+  // var rooks = 0;
+  for(var colStart = 0; colStart < n-1; colStart++){
+    var currentBoard = new Board({n:n});
+    var colIndex = colStart;
 
-  
+    for(var rooks = 0; rooks < n - 1; rooks++){
+      currentBoard.togglePiece(rooks, colIndex);
+    
+      if(colIndex === n - 1){
+        colIndex = 0;
+      } else {
+        colIndex++;
+      } 
+
+      // rooks++;
+    } 
+    possibleSolutions.push(currentBoard);
+  }
+
+  // toggleBoard(y0,y1,y2);
+
+  // var colCounter = 0;
+  // for(var rowIndex =0; rowIndex < n; rowIndex++) {
+  //   var allRows = emptyBoard.rows();
+  //   var row = allRows[rowIndex];
+  //   while(colCounter < n) {
+  //     toggleOneRow(rowIndex,colCounter);
+  //     colCounter++;
+  //   }
+  // } maybe there was a bracket here
+
+  // togglePiece(rowIndex, colIndex)
+
   //place the rook
+  
+
+
   //check for collisions
   // if it has no collisions, push to solutions
 
