@@ -17,7 +17,7 @@ window.findNRooksSolution = function(n) {
   var solution = []; //fixme
 
   // make the empty board
-  var possibleSolutions = findAllNRooksSolutions(n);
+  var possibleSolutions = findAllSolutions(n,"hasAnyRooksConflicts");
   solution = possibleSolutions[0];
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
@@ -25,76 +25,34 @@ window.findNRooksSolution = function(n) {
   return solution;
 };
 
-window.findAllNRooksSolutions = function(n) {
+window.findAllSolutions = function(n,validator) {
   var solutions = [];
+  var solution;
 
   var emptyBoard = new Board({'n':n});
-  var rows = emptyBoard.rows();
+  var rooks = 0;
 
-  var rounds = n;
-
-  var makeSolutions = function(rooks, board){ // index? 
-    var addOnePiece = function(board, rowIndex, colIndex){
-      var newBoard = new Board(board.rows());
-      
-      newBoard.togglePiece(rowIndex, colIndex);
-      
-      return newBoard; 
-    };
-    
-    if(board.hasAnyRowConflicts || board.hasAnyColConflicts){
+  var makeSolutions = function(rooks, currBoard){ // index? 
+    if(currBoard[validator]()){
       return;
     }
 
     if(rooks === n){ 
-      solutions.push(board.rows());
+      solution = _.map(currBoard.rows(), function(row) {
+        return row.slice();
+      });
+      solutions.push(solution);
       return;
     }
-    // if(board === undefined){
-    //   board = new Board({'n': rooks});
-    // }
-
     for(var colIndex = 0; colIndex < n; colIndex++){
-      // for(var j = 0; j < n; j++){
-      makeSolutions( (rooks+1), addOnePiece(board, rooks, colIndex) );
+      currBoard.togglePiece(rooks,colIndex);
+      makeSolutions(rooks + 1, currBoard);
+      currBoard.togglePiece(rooks,colIndex);
     }
   };
 
   makeSolutions(0, emptyBoard);
-
-
-
-  var makeSolutionBoard = function() {
-    for(var rowIndex=0; rowIndex < rows.length; rowIndex++) {
-      for(var colIndex = 0; colIndex< rows.length; colIndex++) {
-        emptyBoard.togglePiece(rowIndex,colIndex);
-        if(emptyBoard.hasRowConflictAt(rowIndex) || emptyBoard.hasColConflictAt(colIndex)) {
-          emptyBoard.togglePiece(rowIndex,colIndex);
-        }
-      }
-    } 
-  };
-
-
-  // var possibleSolutions = [];
-  // for(var colStart = 0; colStart < n; colStart++){
-  //   var emptyBoard = new Board({'n':n});
-  //   var currentBoard = emptyBoard;
-  //   var colIndex = colStart;
-
-  //   for(var rooks = 0; rooks < n; rooks++){
-  //     currentBoard.togglePiece(rooks, colIndex);
-    
-  //     if(colIndex === n - 1){
-  //       colIndex = 0;
-  //     } else {
-  //       colIndex++;
-  //     } 
-  //   }
-  //   possibleSolutions.push(currentBoard.rows());
-  // }
-  // return possibleSolutions;
-  return solutions; // check later
+  return solutions; 
 };
 
 
@@ -120,20 +78,32 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
+
+  var board = new Board({n:n});
   var solution; //fixme
 
-  var nRooksSolutions = findAllNRooksSolutions(n);
-  var nQueensSolutions = [];
+  var possibleSolutions = findAllSolutions(n,"hasAnyQueensConflicts");
 
-  for(var i = 0; i< nRooksSolutions.length; i++) {
-    var currentBoard = new Board(nRooksSolutions[i]);
-    // debugger;
-    if (!(currentBoard.hasAnyMajorDiagonalConflicts()) && !(currentBoard.hasAnyMinorDiagonalConflicts())) {
-      nQueensSolutions.push(currentBoard.rows());
-    }
+  if(possibleSolutions.length > 0) {
+    solution = possibleSolutions[0];
+  } else {
+    solution = board.rows();     
   }
-  solution = nQueensSolutions[0];
+
+  // var nRooksSolutions = findAllNRooksSolutions(n);
+  // var nQueensSolutions = [];
+
+  // for(var i = 0; i< nRooksSolutions.length; i++) {
+  //   var currentBoard = new Board(nRooksSolutions[i]);
+  //   // debugger;
+  //   if (!(currentBoard.hasAnyQueensConflicts()) {
+  //     nQueensSolutions.push(currentBoard.rows());
+  //   }
+  // }
+  // solution = nQueensSolutions[0];
+
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  
   return solution;
 };
 

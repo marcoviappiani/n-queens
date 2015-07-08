@@ -165,7 +165,7 @@
         currRow = Math.abs(majorDiagonalColumnIndexAtFirstRow);
       }
 
-      while(colIndex < rows.length - 1 && currRow < rows.length - 1) {
+      while(colIndex < rows.length && currRow < rows.length) {
         if(rows[currRow][colIndex] === 1) {
           counter++;
         }
