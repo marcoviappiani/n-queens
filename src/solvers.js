@@ -59,17 +59,10 @@ window.findAllSolutions = function(n,validator) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var factorial = function(n){
-    if(n === 0){
-      return 1;
-    }
-    if(n === 1){
-      return 1;
-    }
-    return n * factorial(n-1);
-  };
-  var solutionCount = factorial(n);
- 
+  var solutionCount = 0;
+  var possibleSolutions = findAllSolutions(n, "hasAnyRooksConflicts");
+  solutionCount = possibleSolutions.length;
+
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
@@ -90,18 +83,6 @@ window.findNQueensSolution = function(n) {
     solution = board.rows();     
   }
 
-  // var nRooksSolutions = findAllNRooksSolutions(n);
-  // var nQueensSolutions = [];
-
-  // for(var i = 0; i< nRooksSolutions.length; i++) {
-  //   var currentBoard = new Board(nRooksSolutions[i]);
-  //   // debugger;
-  //   if (!(currentBoard.hasAnyQueensConflicts()) {
-  //     nQueensSolutions.push(currentBoard.rows());
-  //   }
-  // }
-  // solution = nQueensSolutions[0];
-
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   
   return solution;
@@ -110,23 +91,13 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
-
+  var solutionCount = 0; //fixme
+  var possibleSolutions = findAllSolutions(n, "hasAnyQueensConflicts");
+  solutionCount = possibleSolutions.length;
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
 
-// var getEmptyBoard = function(n) {
-//   var emptyBoard = [];
-//   // generate an empty board and load it in
-//   for(var i=0; i<n; i++){
-//     var row = [];
-//     emptyBoard = row;
-//     for(var j=0;j<n; j++) {
-//       row.push(0);
-//     }
-//   }
-// };
 
 
 
